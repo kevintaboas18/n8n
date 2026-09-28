@@ -16,6 +16,46 @@ registro de lo que se hizo aquí, incluidas las dos cosas que hubo que ajustar.
 Son **independientes**. Lo único en lo que deben coincidir es `DATABASE_URL` y
 `BETTER_AUTH_SECRET`: la API firma la cookie de sesión y la app la verifica.
 
+## Arranque automatico en Claude Code web
+
+Este repositorio trae un hook de `SessionStart`. Una sesion nueva prepara todo
+sola: instala Node 24, escribe `.env` si falta, instala dependencias, arranca
+Postgres, crea las dos bases, aplica migraciones y carga los datos de demo.
+
+- El hook es `.claude/hooks/session-start.sh`. Se registra en `.claude/settings.json`.
+- Solo corre en remoto. Comprueba `CLAUDE_CODE_REMOTE`.
+- Es idempotente. Una segunda ejecucion no repite trabajo hecho.
+- Corre en modo sincrono. La sesion empieza cuando termina. Asi nada arranca
+  antes de tener sus dependencias.
+
+Despues levanta los tres procesos:
+
+```sh
+./scripts/dev-up.sh
+```
+
+El script arranca Postgres si se paro, y cada proceso que no responda. Deja los
+registros en `/tmp/crm-logs`. Devuelve el control en segundos.
+
+`bun run dev` no sirve en este entorno. Turbo marca `agent#dev` como interactivo
+y se niega a correr sin terminal.
+
+## Como entrar sin cliente OAuth
+
+El inicio de sesion pasa por un proveedor de identidad. No hay forma de sacar
+una sesion desde la terminal. Para eso existe:
+
+```sh
+bun run --filter=api dev:session
+```
+
+Escribe las filas que Better Auth habria escrito. Imprime la cookie que habria
+puesto. Se niega a correr con `NODE_ENV=production`.
+
+Pega esa cookie en el navegador y entras en el CRM.
+
+## Arranque manual
+
 ## Arranque
 
 ```sh
@@ -125,14 +165,17 @@ bun run db:test       # crea y migra la base de datos de pruebas
 Los tests necesitan `TEST_DATABASE_URL` y **se niegan a correr sin ella** — son
 tests de integración reales, escriben y borran filas.
 
-Dos avisos sobre la suite:
+Dos avisos sobre la suite, los dos ya resueltos por el hook:
 
-- `Auth (e2e) > lets the sign-in page read what it may offer` da por hecho que
-  el par de Google está puesto. Con `GOOGLE_CLIENT_ID` vacío, ese test falla y no
-  significa nada roto.
+- `Auth (e2e) > lets the sign-in page read what it may offer` afirma
+  `google: true`. El fichero de test pone credenciales de respaldo, pero otro
+  test congela la configuracion de auth antes, asi que no llegan a aplicarse.
+  El CI del repositorio resuelve esto poniendo valores de marcador
+  (`.github/workflows/ci.yml`). El `.env` de esta instalacion usa los mismos.
+  Cambialos por tu cliente OAuth real cuando lo tengas.
 - `retireExhausted > retires no more rows than the limit allows` cuenta filas y
-  asume la tabla `agentTask` vacía. Si la base de pruebas quedó con restos de una
-  ejecución anterior, falla. Se limpia con
+  asume la tabla `agentTask` vacia. Con restos de una ejecucion anterior, falla.
+  El hook limpia esa tabla en cada arranque. A mano:
   `psql -d crm_test -c 'TRUNCATE "agentTask" CASCADE;'`.
 
 ## Estado verificado en este entorno
@@ -144,8 +187,11 @@ Dos avisos sobre la suite:
 | App :3000 | HTTP 200, interfaz completa |
 | API :3001 | HTTP 200, base conectada, 21 routers / 160 procedimientos tRPC |
 | Agente :2000 | HTTP 200, `dispatch-health` responde `ok:true` |
+| Cola de trabajo | Reclama, arrienda y abre sesion. Verificado con una tarea real |
 | Tests | 1158 pasan, 0 fallan |
-| Tipos | Limpio en los 13 paquetes |
+| Tipos y lint | Limpios en los 13 paquetes |
+| Hook de sesion | Corre en limpio y es idempotente |
+| `dev-up.sh` | Levanta los tres procesos en unos segundos |
 | Razonamiento del agente | **Bloqueado**: falta acceso a AI Gateway |
 
 ## Poner esto en producción
