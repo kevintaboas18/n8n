@@ -90,6 +90,36 @@ The verdict weights the mean at 60% and the **weakest single check** at 40%,
 because one signal is enough. PASS needs an overall of 70+ with no check
 below 55.
 
+## Language
+
+`humanize.py` and `detect.py` read the language of the draft and print
+`language: Spanish (detected)` when they switch to Spanish; `--lang es` or
+`--lang en` forces it. English output is exactly what it was before. Spanish
+reads `slop.es.json` (94 stock words and phrases, 17 structural tells); the
+invisible characters and the typographic substitutions are shared with
+`slop.json`. Of the 94, 51 are report-only, 25 are deleted and 18 are swapped.
+
+- **Spanish verbs and adjectives are reported, not replaced.** They change with
+  person, gender and number, so a blind swap writes broken grammar. Those
+  entries show up under "STOCK TERMS REPORTED, NOT CHANGED" and are yours to
+  rewrite, like the structural tells. Stock openers and closers are deleted
+  (`Sin más preámbulos,`, `Seamos sinceros:`, `Sígueme para más contenido`) and
+  only invariable connectives are swapped (`por ende` to `por eso`).
+- **A dash that opens a line is left alone.** In Spanish it marks dialogue.
+  Every other em dash becomes a comma, as in English.
+- **Accents are optional when matching.** `Sumergete` and `Sumérgete` are the
+  same entry. The `ñ` is not optional.
+- **VOICE has no contractions in Spanish**, so that third of the English score
+  is dropped and person is counted from pronouns and clitics (`me`, `te`, `tu`,
+  `nos`...), because Spanish carries the person in the verb ending.
+- **The Spanish panel is untested.** The thresholds are the English ones,
+  carried over, and the word list is a first version written by hand, not tuned
+  on real Spanish captions. Some entries (`innovador`, `potenciar`, `al final
+  del día`) are ordinary Spanish that models overuse: a hit means "rewrite if
+  you did not choose it", not "a model wrote this". Scores can move the wrong
+  way on a small edit. Show the cleaned text and the flagged lines, and call the
+  score a rough signal.
+
 ## Say this honestly
 
 These are five local heuristics modelled on the signals public detectors key

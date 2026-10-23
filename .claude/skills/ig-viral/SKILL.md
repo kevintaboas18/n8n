@@ -147,6 +147,22 @@ with the formula id already chosen.
 Never hand back "make a reel like this one". Hand back a hook line they could
 say tomorrow.
 
+## Language
+
+`swipe.py` reads the language of each hook, so a batch can mix English and
+Spanish accounts. A Spanish hook is named against `../ig-reel/hooks.es.json`
+and scored by the Spanish panel in `hookscore.py`; `--lang es` or `--lang en`
+forces one language for the whole file. Both formula files use the same 26 ids,
+and the table always prints the English formula name, so a mixed batch adds up.
+The column names may be Spanish: `cuenta  seguidores  mediana  vistas  gancho`.
+Write view counts as plain numbers; `412.000` and `412000` both work, while
+`1,2 M` is read as 12 (every character that is not a digit is dropped).
+
+Keep the hook in the creator's own words, accents and mistakes included. The
+Spanish classifier is a first version written by hand: expect more
+"unclassified" rows than in English, and read them. It has been checked against
+no real Spanish reels.
+
 ## Output
 
 ```

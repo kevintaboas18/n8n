@@ -25,6 +25,7 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
 
 WORD_RE = re.compile(r"[A-Za-z0-9$%'’-]+")
 SENT_RE = re.compile(r"[^.!?]+[.!?]*")
@@ -42,14 +43,64 @@ MAX_BEAT = 4.0           # seconds on one idea with no change on screen.
 ABSTRACT_RUN = 3         # beats in a row with nothing checkable in them.
 
 
-def words(text):
+# Spanish, added next to the English code, which is untouched. The timing maths is the same: it
+# counts words at a words-per-minute rate. What differs is what counts as a word (accents), what
+# counts as concrete, and which words are too common to count as an echo of the hook.
+def strip_accents(text):
+    """Lower-case and drop accents, keeping the n-tilde."""
+    out = []
+    for ch in unicodedata.normalize("NFD", text.lower()):
+        if unicodedata.category(ch) == "Mn" and ch != "̃":
+            continue
+        out.append(ch)
+    return unicodedata.normalize("NFC", "".join(out))
+
+
+ES_STOP = {"de", "la", "que", "el", "en", "y", "o", "los", "las", "un", "una", "por", "con", "para", "es",
+           "se", "te", "mi", "tu", "lo", "al", "del", "como", "mas", "pero", "sus", "le", "ya", "si", "este",
+           "esta", "esto", "muy", "todo", "tus", "mis", "nos", "yo", "porque", "tambien", "sin", "sobre",
+           "hay", "ha", "han", "eres", "soy", "estoy", "quiero", "puedo", "tengo", "voy", "va", "vas",
+           "cuando", "donde", "quien", "cual", "fue", "hoy", "nadie", "nunca", "siempre", "ahora"}
+EN_STOP = {"the", "and", "to", "of", "in", "is", "it", "that", "for", "you", "with", "on", "this", "was",
+           "are", "be", "have", "my", "i", "not", "but", "at", "as", "from", "your", "we", "they", "she",
+           "what", "how", "when", "because", "so", "do", "does", "did", "just", "about", "if", "or", "an",
+           "can", "will", "would", "there", "their", "its", "all", "out", "up", "get", "got", "go", "like"}
+
+
+def detect_lang(text):
+    """'es' or 'en' for one piece of text. Falls back to 'en' when there is no evidence."""
+    low = text.lower()
+    tokens = [strip_accents(t) for t in re.findall(r"[a-záéíóúüñ]+", low)]
+    es = sum(1 for t in tokens if t in ES_STOP)
+    es += 3 * sum(low.count(c) for c in "¿¡ñ") + sum(low.count(c) for c in "áéíóúü")
+    en = sum(1 for t in tokens if t in EN_STOP)
+    return "es" if es > en else "en"
+
+
+ES_WORD_RE = re.compile(r"[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ$%'’-]+")
+ES_CONCRETE_RE = re.compile(
+    r"\$\s?\d|€\s?\d|\b\d[\d,.]*\b|(?<!^)(?<![¿¡])(?<![.!?]\s)\b[A-ZÁÉÍÓÚÑ][a-záéíóúüñ]{2,}\b", re.MULTILINE)
+ES_STOPWORDS = {
+    "el", "la", "los", "las", "un", "una", "unos", "unas", "y", "o", "u", "e", "pero", "si", "de", "del", "a",
+    "al", "en", "con", "por", "para", "que", "es", "son", "era", "fue", "ser", "esta", "este", "eso", "esto",
+    "estos", "estas", "tu", "tus", "te", "ti", "yo", "mi", "mis", "me", "nos", "nuestro", "ellos", "ellas",
+    "lo", "le", "les", "se", "no", "ya", "muy", "mas", "todo", "todos", "como", "cuando", "donde", "tambien",
+    "solo", "sin", "sobre", "entre", "hay", "he", "has", "ha", "han", "va", "voy", "vas", "vamos", "fui",
+    "tengo", "tiene", "tienes", "quiero", "puedo", "asi", "aqui", "ahora", "hoy", "cada", "otra", "otro",
+    "mismo", "misma", "tan", "tanto", "menos", "ni", "sino",
+}
+
+
+def words(text, lang="en"):
     # "$18,000" is one word when it is spoken, so it is one word here too.
+    if lang == "es":                         # 18.000 and 1,5 are each one spoken number
+        return ES_WORD_RE.findall(re.sub(r"(?<=\d)[.,](?=\d)", "", text))
     return WORD_RE.findall(re.sub(r"(?<=\d),(?=\d)", "", text))
 
 
-def pretty(token):
+def pretty(token, sep=","):
     """Put the thousands separator back for display."""
-    return re.sub(r"(\d)(?=(\d{3})+$)", r"\1,", token)
+    return re.sub(r"(\d)(?=(\d{3})+$)", r"\1" + sep, token)
 
 
 def tc(seconds):
@@ -57,13 +108,13 @@ def tc(seconds):
     return f"{int(m)}:{s:04.1f}"
 
 
-def split_beats(raw, wps):
+def split_beats(raw, wps, lang="en"):
     """One line is one beat, unless a line is too long to be one."""
     beats = []
     for line in [l.strip() for l in raw.splitlines()]:
         if not line:
             continue
-        if len(words(line)) / wps <= MAX_BEAT * 1.5:
+        if len(words(line, lang)) / wps <= MAX_BEAT * 1.5:
             beats.append(line)
             continue
         # Long paragraph: break it at sentence ends so the timings mean
@@ -72,7 +123,7 @@ def split_beats(raw, wps):
         buf = ""
         for part in parts:
             candidate = (buf + " " + part).strip()
-            if buf and len(words(candidate)) / wps > MAX_BEAT:
+            if buf and len(words(candidate, lang)) / wps > MAX_BEAT:
                 beats.append(buf)
                 buf = part
             else:
@@ -82,15 +133,16 @@ def split_beats(raw, wps):
     return beats
 
 
-def analyse(raw, wpm=165, target=None):
+def analyse(raw, wpm=165, target=None, lang="en"):
     wps = wpm / 60.0
-    beats = split_beats(raw, wps)
+    beats = split_beats(raw, wps, lang)
     if not beats:
         return None
+    concrete_re = ES_CONCRETE_RE if lang == "es" else CONCRETE_RE
 
     rows, clock = [], 0.0
     for i, text in enumerate(beats):
-        n = len(words(text))
+        n = len(words(text, lang))
         dur = n / wps
         rows.append({
             "n": i + 1,
@@ -98,7 +150,7 @@ def analyse(raw, wpm=165, target=None):
             "dur": round(dur, 2),
             "words": n,
             "text": text,
-            "concrete": len(CONCRETE_RE.findall(text)),
+            "concrete": len(concrete_re.findall(text)),
             "label": "",
             "flags": [],
         })
@@ -146,9 +198,15 @@ def analyse(raw, wpm=165, target=None):
             run, start = 0, None
 
     # Does the last line hand you back to the first one?
-    first = {w.lower() for w in words(rows[0]["text"]) if w.lower() not in STOPWORDS}
-    last = {w.lower() for w in words(rows[-1]["text"]) if w.lower() not in STOPWORDS}
-    loop = sorted(pretty(w) for w in first & last)
+    if lang == "es":
+        shown = {strip_accents(w): w.lower() for w in words(rows[0]["text"], lang)
+                 if strip_accents(w) not in ES_STOPWORDS}
+        last = {strip_accents(w) for w in words(rows[-1]["text"], lang)}
+        loop = sorted(pretty(shown[k], ".") for k in shown.keys() & last)
+    else:
+        first = {w.lower() for w in words(rows[0]["text"]) if w.lower() not in STOPWORDS}
+        last = {w.lower() for w in words(rows[-1]["text"]) if w.lower() not in STOPWORDS}
+        loop = sorted(pretty(w) for w in first & last)
     if loop:
         notes.append(f"Loops: the last beat repeats \"{', '.join(loop[:3])}\" from the hook. "
                      "Second watches are free reach.")
@@ -197,10 +255,17 @@ def main():
     ap.add_argument("--wpm", type=float, default=165, help="speaking rate (default 165)")
     ap.add_argument("--target", type=float, help="target length in seconds")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--lang", choices=["auto", "en", "es"], default="auto",
+                    help="language of the script (default: detect it)")
     args = ap.parse_args()
 
     raw = sys.stdin.read() if args.input == "-" else open(args.input, encoding="utf-8").read()
-    a = analyse(raw, wpm=args.wpm, target=args.target)
+    lang = args.lang if args.lang != "auto" else detect_lang(raw)
+    if lang == "es":
+        print(f"language: Spanish ({'forced' if args.lang != 'auto' else 'detected'})", file=sys.stderr)
+    a = analyse(raw, wpm=args.wpm, target=args.target, lang=lang)
+    if a and lang == "es":
+        a["lang"] = "es"
     if not a:
         print("empty script", file=sys.stderr)
         sys.exit(2)

@@ -96,6 +96,27 @@ python3 caption.py draft.txt --keywords "client proposals,agency pricing"
 - **Alt text is worth 20 seconds.** For carousels and photos, write it. It is
   read by screen readers and by Instagram.
 
+## Language
+
+`caption.py` reads the language of the caption itself and prints
+`language: Spanish (detected)` when it switches to Spanish; `--lang es` or
+`--lang en` forces it. English output is exactly what it was before.
+
+- The 125-character window, the 2,200 limit and the five-hashtag cap are the
+  same in any language. What changes is what the linter recognises: hashtags
+  with accents and `ñ`, Spanish asks (`Comenta CONTRATO`, `escríbeme por DM`,
+  `enlace en la bio`, `desliza`), and Spanish filler tags (`#parati`,
+  `#tendencia`, `#megusta`).
+- Search terms match without regard to accents (`pagina` finds `página`) but
+  not the `ñ` (`diseno` does not find `diseño`), because `año` and `ano` are
+  different words.
+- **One caption, one language.** Only the first 125 characters show before the
+  tap, so a caption written in both languages shows one of them. A user who
+  posts in both languages writes two captions.
+- The Spanish patterns were written by hand and not tuned on real Spanish
+  captions. They catch the usual mistakes; they will miss an unusual phrasing of
+  an ask.
+
 ## The loop
 
 1. Decide Job A or Job B and say which.

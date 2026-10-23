@@ -88,6 +88,36 @@ responde, no escribe mensajes.
 | 5 | límite de peticiones de Meta | esperar y repetir con `--limit` menor |
 | 6 | sin red hacia `graph.instagram.com` | revisar el acceso de red del entorno |
 
+## Tus textos en español
+
+Las seis herramientas de texto (`hookscore`, `beats`, `caption`, `humanize`,
+`detect`, `swipe`) leen el idioma de cada pieza y pasan solas al español. El inglés
+se comporta exactamente como antes: `tests/test_english_unchanged.py` lo comprueba
+contra 32 casos grabados con los scripts originales.
+
+- **Una pieza, un idioma.** Un gancho, un guion o una descripción por idioma. Si
+  publicas la misma idea en los dos, son dos piezas, cada una escrita desde su
+  propia fórmula. Para los ganchos en español hay `ig-reel/hooks.es.json`, con las
+  mismas 26 fórmulas y los mismos números que `hooks.json`.
+- **Se puede forzar** con `--lang es` o `--lang en`. Una cadena sin ninguna palabra
+  vacía (por ejemplo `CARRUSELES vs REELS`) se toma por inglés: ahí conviene forzar.
+- **Las tildes no hacen falta** al comparar, salvo la eñe (`año` y `ano` son palabras
+  distintas) y un caso: el pasado en primera persona de un verbo en `-ar` (`gané`,
+  `cobré`) se reconoce por su tilde.
+- **Los verbos y adjetivos del léxico se avisan, no se reescriben**, porque cambian
+  con la persona, el género y el número. Se borran solo muletillas de arranque y de
+  cierre (`Sin más preámbulos,`, `Seamos sinceros:`) y se cambian solo conectores
+  invariables (`por ende` por `por eso`).
+
+**Lo que no sé.** Las listas de palabras, los patrones y los umbrales en español están
+escritos a mano y no se han probado con captions ni reels reales en español. Sobre
+mis propios ejemplos (12 buenos y 12 malos, escritos por mí) el panel de ganchos
+ordena bien 137 de 144 parejas en la serie que escribí después de ajustarlo, y marca
+como flojos 11 de los 12 malos. Eso mide algo más fácil que distinguir los éxitos de
+los fracasos de un mismo creador, que es lo que importa y que no he medido. Úsalo para
+cazar saludos, preámbulos y ganchos sin nada concreto, y no leas una puntuación en
+español como una predicción.
+
 ## Qué no hace esta fase
 
 Publicar, responder comentarios, mensajes directos, webhooks. Eso viene después, si

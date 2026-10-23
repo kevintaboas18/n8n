@@ -23,6 +23,8 @@ Usage
   python3 swipe.py captured.tsv
   python3 swipe.py captured.tsv --out ~/.claude/instagram/swipe.md
   python3 swipe.py captured.tsv --json
+  python3 swipe.py capturados.tsv     # Spanish hooks are detected on their own; the header may read
+                                      # cuenta  seguidores  mediana  vistas  gancho
 """
 
 import argparse
@@ -31,6 +33,7 @@ import os
 import re
 import statistics
 import sys
+import unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 HOOKS = os.path.join(HERE, "..", "ig-reel", "hooks.json")
@@ -63,12 +66,85 @@ def classify(hook, formulas):
     return None, "unclassified"
 
 
+# ---------------------------------------------------------------------------
+# Spanish
+#
+# Added beside the English code, which is untouched. A hook is Spanish if it reads as Spanish
+# (detected per hook, or --lang es): it is named against ig-reel/hooks.es.json, scored by
+# hookscore's Spanish panel, and its words are counted with accented letters kept whole. Both
+# files use the same 26 ids, so "#3" is the same formula in either language, and the table always
+# prints the English formula name so a mixed batch adds up. Spanish column headers
+# (cuenta, seguidores, mediana, vistas, gancho) are accepted. A first version, not tuned on a
+# corpus of real Spanish reels.
+# ---------------------------------------------------------------------------
+
+HOOKS_ES = os.path.join(HERE, "..", "ig-reel", "hooks.es.json")
+ES_WORD_RE = re.compile(r"[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ$%'’-]+")
+ES_HEADERS = {"cuenta": "account", "seguidores": "followers", "mediana": "median", "vistas": "views",
+              "visualizaciones": "views", "reproducciones": "views", "gancho": "hook"}
+
+
+def strip_accents(text):
+    """Lower-case and drop accents, keeping the n-tilde, so 'Perdí' and 'perdi' match alike."""
+    out = []
+    for ch in unicodedata.normalize("NFD", text.lower()):
+        if unicodedata.category(ch) == "Mn" and ch != "̃":
+            continue
+        out.append(ch)
+    return unicodedata.normalize("NFC", "".join(out))
+
+
+ES_STOP = {"de", "la", "que", "el", "en", "y", "o", "los", "las", "un", "una", "por", "con", "para", "es",
+           "se", "te", "mi", "tu", "lo", "al", "del", "como", "mas", "pero", "sus", "le", "ya", "si", "este",
+           "esta", "esto", "muy", "todo", "tus", "mis", "nos", "yo", "porque", "tambien", "sin", "sobre",
+           "hay", "ha", "han", "eres", "soy", "estoy", "quiero", "puedo", "tengo", "voy", "va", "vas",
+           "cuando", "donde", "quien", "cual", "fue", "hoy", "nadie", "nunca", "siempre", "ahora"}
+EN_STOP = {"the", "and", "to", "of", "in", "is", "it", "that", "for", "you", "with", "on", "this", "was",
+           "are", "be", "have", "my", "i", "not", "but", "at", "as", "from", "your", "we", "they", "she",
+           "what", "how", "when", "because", "so", "do", "does", "did", "just", "about", "if", "or", "an",
+           "can", "will", "would", "there", "their", "its", "all", "out", "up", "get", "got", "go", "like"}
+
+
+def detect_lang(text):
+    """'es' or 'en' for one piece of text. Falls back to 'en' when there is no evidence."""
+    low = text.lower()
+    tokens = [strip_accents(t) for t in re.findall(r"[a-záéíóúüñ]+", low)]
+    es = sum(1 for t in tokens if t in ES_STOP)
+    es += 3 * sum(low.count(c) for c in "¿¡ñ") + sum(low.count(c) for c in "áéíóúü")
+    en = sum(1 for t in tokens if t in EN_STOP)
+    return "es" if es > en else "en"
+
+
+def load_formulas_es(path):
+    """Spanish formulas as (id, English name, Spanish name, pattern), in classify order."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            d = json.load(fh)
+    except Exception:
+        return None
+    by_id = {h["id"]: h for h in d["hooks"]}
+    order = d.get("classify_order") or sorted(by_id)
+    return [(by_id[i]["id"], by_id[i].get("name_en", by_id[i]["name"]), by_id[i]["name"],
+             re.compile(by_id[i]["match"], re.IGNORECASE)) for i in order if i in by_id]
+
+
+def classify_es(hook, formulas_es):
+    """Patterns run on the accent-stripped, lower-cased hook."""
+    if not formulas_es:
+        return None, "unclassified", None
+    folded = strip_accents(hook)
+    for fid, name_en, name_es, pattern in formulas_es:
+        if pattern.search(folded):
+            return fid, name_en, name_es
+    return None, "unclassified", None
+
+
 def read_rows(path):
     raw = sys.stdin.read() if path == "-" else open(path, encoding="utf-8").read()
     lines = [l for l in raw.splitlines() if l.strip() and not l.lstrip().startswith("#")]
     if not lines:
         return []
-    head = [c.strip().lower() for c in lines[0].split("\t")]
+    head = [ES_HEADERS.get(c, c) for c in (c.strip().lower() for c in lines[0].split("\t"))]
     if "views" in head and "hook" in head:
         cols, body = head, lines[1:]
     else:
@@ -91,12 +167,27 @@ def read_rows(path):
     return rows
 
 
-def analyse(rows, formulas):
+def analyse(rows, formulas, formulas_es=None, lang="auto"):
     used_median = any(r.get("median") for r in rows)
     for r in rows:
         base = r.get("median") or r.get("followers") or 0
         r["baseline"] = base
         r["outlier"] = round(r["views"] / base, 2) if base else None
+        if (lang if lang != "auto" else detect_lang(r["hook"])) == "es":
+            r["lang"] = "es"
+            r["formula_id"], r["formula"], name_es = classify_es(r["hook"], formulas_es)
+            if name_es:
+                r["formula_es"] = name_es
+            r["words"] = len(ES_WORD_RE.findall(re.sub(r"(?<=\d)[.,](?=\d)", "", r["hook"])))   # 18.000 is one word
+            if score_hook:
+                try:
+                    _, overall, verdict, _ = score_hook(r["hook"], "es")
+                    r["hook_score"], r["hook_verdict"] = round(overall, 1), verdict
+                except TypeError:                     # an older hookscore.py with no Spanish panel
+                    r["hook_score"], r["hook_verdict"] = None, None
+            else:
+                r["hook_score"], r["hook_verdict"] = None, None
+            continue
         r["formula_id"], r["formula"] = classify(r["hook"], formulas)
         r["words"] = len(WORD_RE.findall(r["hook"]))
         if score_hook:
@@ -175,6 +266,9 @@ def main():
     ap = argparse.ArgumentParser(description="Rank collected reels by outlier multiple.")
     ap.add_argument("input", nargs="?", default="-", help="TSV file, or - for stdin")
     ap.add_argument("--hooks", default=HOOKS, help="path to ig-reel/hooks.json")
+    ap.add_argument("--hooks-es", default=HOOKS_ES, help="path to ig-reel/hooks.es.json (Spanish hooks)")
+    ap.add_argument("--lang", choices=["auto", "en", "es"], default="auto",
+                    help="language of the hooks (default: detect it for each hook)")
     ap.add_argument("--out", help="also write the swipe file as markdown here")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
@@ -185,7 +279,15 @@ def main():
               file=sys.stderr)
         sys.exit(2)
     formulas = load_formulas(args.hooks)
-    a = analyse(rows, formulas)
+    formulas_es = load_formulas_es(args.hooks_es)
+    a = analyse(rows, formulas, formulas_es, args.lang)
+    spanish = sum(1 for r in a["reels"] if r.get("lang") == "es")
+    if spanish:
+        print(f"language: {spanish} Spanish hook(s) of {a['n']} "
+              f"({'forced' if args.lang != 'auto' else 'detected'}); Spanish formulas and hook panel are "
+              "a first version, not tuned on real Spanish reels.", file=sys.stderr)
+        if not formulas_es:
+            print("note: hooks.es.json not found, Spanish formulas not named. Pass --hooks-es.", file=sys.stderr)
     if not formulas:
         print("note: hooks.json not found, formulas not named. Pass --hooks.", file=sys.stderr)
     if score_hook is None:

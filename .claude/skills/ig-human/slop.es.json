@@ -1,0 +1,996 @@
+{
+ "version": "1.0-es",
+ "note": "Spanish counterpart of slop.json, used by humanize.py and detect.py when a draft is Spanish. invisible and typographic are not repeated here: they are language-independent and are read from slop.json. Entries are matched without regard to accents (people drop them) but the n-tilde is kept. replace: text means swap, an empty string means delete, null means REPORT ONLY (Spanish verbs and adjectives change with person, gender and number, so a blind swap would write broken grammar). forms lists other spellings or conjugations of the same entry. FIRST VERSION: written by hand from how Spanish machine text reads, not tuned on a corpus of real Spanish captions. Some entries (innovador, potenciar, al final del día) are ordinary Spanish that models overuse: the tools report them, they do not prove a text is machine-written. Edit freely.",
+ "words": [
+  {
+   "find": "potenciar",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "potenciamos",
+    "potencian",
+    "potenciando",
+    "potenciado",
+    "potenciada",
+    "potenciará"
+   ]
+  },
+  {
+   "find": "desbloquear",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "desbloquea",
+    "desbloqueas",
+    "desbloqueamos",
+    "desbloquean",
+    "desbloqueando",
+    "desbloquee",
+    "desbloqueemos"
+   ]
+  },
+  {
+   "find": "empoderar",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "empodera",
+    "empoderan",
+    "empoderamos",
+    "empoderando",
+    "empoderado",
+    "empoderada",
+    "empoderamiento"
+   ]
+  },
+  {
+   "find": "revolucionar",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "revoluciona",
+    "revolucionan",
+    "revolucionando",
+    "revolucionó",
+    "revolucionará"
+   ]
+  },
+  {
+   "find": "tapiz",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "tapices"
+   ]
+  },
+  {
+   "find": "sinergia",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "sinergias"
+   ]
+  },
+  {
+   "find": "paradigma",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "paradigmas"
+   ]
+  },
+  {
+   "find": "ecosistema",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "ecosistemas"
+   ]
+  },
+  {
+   "find": "plétora",
+   "replace": null,
+   "family": "nouns"
+  },
+  {
+   "find": "crucial",
+   "replace": "importante",
+   "family": "adjectives"
+  },
+  {
+   "find": "cruciales",
+   "replace": "importantes",
+   "family": "adjectives"
+  },
+  {
+   "find": "robusto",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "robusta",
+    "robustos",
+    "robustas"
+   ]
+  },
+  {
+   "find": "innovador",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "innovadora",
+    "innovadores",
+    "innovadoras"
+   ]
+  },
+  {
+   "find": "transformador",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "transformadora",
+    "transformadores",
+    "transformadoras"
+   ]
+  },
+  {
+   "find": "revolucionario",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "revolucionaria",
+    "revolucionarios",
+    "revolucionarias"
+   ]
+  },
+  {
+   "find": "holístico",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "holística",
+    "holísticos",
+    "holísticas"
+   ]
+  },
+  {
+   "find": "vibrante",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "vibrantes"
+   ]
+  },
+  {
+   "find": "multifacético",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "multifacética",
+    "multifacéticos",
+    "multifacéticas"
+   ]
+  },
+  {
+   "find": "intrincado",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "intrincada",
+    "intrincados",
+    "intrincadas"
+   ]
+  },
+  {
+   "find": "inigualable",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "inigualables"
+   ]
+  },
+  {
+   "find": "meticuloso",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "meticulosa",
+    "meticulosos",
+    "meticulosas",
+    "meticulosamente"
+   ]
+  },
+  {
+   "find": "asimismo",
+   "replace": "también",
+   "family": "connectives"
+  },
+  {
+   "find": "indudablemente",
+   "replace": "",
+   "family": "connectives"
+  },
+  {
+   "find": "innegablemente",
+   "replace": "",
+   "family": "connectives"
+  }
+ ],
+ "phrases": [
+  {
+   "find": "sumergirse en",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "sumergirte en",
+    "sumergirnos en",
+    "sumérgete en",
+    "sumérjase en",
+    "sumérjanse en",
+    "sumerjámonos en",
+    "sumergiéndose en",
+    "sumergiéndote en"
+   ]
+  },
+  {
+   "find": "adentrarse en",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "adentrarte en",
+    "adentrarnos en",
+    "adéntrate en",
+    "adéntrese en",
+    "adentrémonos en",
+    "adentrándose en",
+    "adentrándote en"
+   ]
+  },
+  {
+   "find": "profundizar en",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "profundizamos en",
+    "profundicemos en",
+    "profundiza en",
+    "profundizan en",
+    "profundizando en",
+    "profundices en",
+    "ahondar en",
+    "ahondemos en"
+   ]
+  },
+  {
+   "find": "aprovechar al máximo",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "aprovecha al máximo",
+    "aprovechamos al máximo",
+    "aprovechan al máximo",
+    "aprovechando al máximo",
+    "aprovechen al máximo"
+   ]
+  },
+  {
+   "find": "navegar por las complejidades",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "navegar las complejidades",
+    "navegando por las complejidades",
+    "navega por las complejidades",
+    "navegamos por las complejidades"
+   ]
+  },
+  {
+   "find": "llevar a cabo",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "lleva a cabo",
+    "llevan a cabo",
+    "llevamos a cabo",
+    "llevó a cabo",
+    "llevando a cabo",
+    "llevado a cabo",
+    "llevar a cabo"
+   ]
+  },
+  {
+   "find": "embarcarse en un viaje",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "embarcarte en un viaje",
+    "embarcarnos en un viaje",
+    "embárcate en un viaje",
+    "embarquémonos en un viaje"
+   ]
+  },
+  {
+   "find": "desbloquear tu potencial",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "desbloquea tu potencial",
+    "desbloquear el potencial",
+    "desbloquea el potencial",
+    "desbloquear todo tu potencial",
+    "desbloquea todo tu potencial",
+    "libera tu potencial",
+    "liberar tu potencial",
+    "libera todo tu potencial",
+    "liberar todo tu potencial",
+    "liberar el potencial",
+    "desata tu potencial",
+    "desatar tu potencial",
+    "desata todo tu potencial",
+    "desatar el potencial"
+   ]
+  },
+  {
+   "find": "se erige como",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "se erigen como",
+    "se alza como",
+    "se alzan como",
+    "se posiciona como",
+    "se posicionan como",
+    "se consolida como",
+    "se consolidan como",
+    "emerge como"
+   ]
+  },
+  {
+   "find": "juega un papel crucial",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "juega un papel fundamental",
+    "juega un papel clave",
+    "juega un papel vital",
+    "juega un papel esencial",
+    "juegan un papel crucial",
+    "juegan un papel fundamental",
+    "juegan un papel clave",
+    "desempeña un papel crucial",
+    "desempeña un papel fundamental",
+    "desempeña un papel clave",
+    "desempeñan un papel crucial",
+    "desempeñan un papel fundamental",
+    "jugar un papel crucial",
+    "jugar un papel fundamental",
+    "jugar un papel clave",
+    "desempeñar un papel crucial",
+    "desempeñar un papel fundamental"
+   ]
+  },
+  {
+   "find": "no podemos pasar por alto",
+   "replace": null,
+   "family": "verbs",
+   "forms": [
+    "no se puede pasar por alto",
+    "no hay que pasar por alto"
+   ]
+  },
+  {
+   "find": "piedra angular",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "piedras angulares",
+    "pilar fundamental",
+    "pilares fundamentales"
+   ]
+  },
+  {
+   "find": "cambio de juego",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "game changer",
+    "game-changer",
+    "gamechanger",
+    "game changers",
+    "game-changers"
+   ]
+  },
+  {
+   "find": "punto de inflexión",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "puntos de inflexión"
+   ]
+  },
+  {
+   "find": "un sinfín de",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "una amplia gama de",
+    "un amplio abanico de",
+    "un abanico de",
+    "una gran diversidad de"
+   ]
+  },
+  {
+   "find": "panorama actual",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "panorama digital",
+    "panorama empresarial",
+    "panorama competitivo",
+    "panorama cambiante",
+    "panorama en constante evolución"
+   ]
+  },
+  {
+   "find": "es un testimonio de",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "es testimonio de",
+    "son testimonio de",
+    "son un testimonio de",
+    "un testimonio de"
+   ]
+  },
+  {
+   "find": "la clave del éxito",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "la clave para el éxito",
+    "el secreto del éxito"
+   ]
+  },
+  {
+   "find": "descubre el poder de",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "descubre el poder del",
+    "descubre el poder de la",
+    "descubre el poder de los"
+   ]
+  },
+  {
+   "find": "al siguiente nivel",
+   "replace": null,
+   "family": "nouns",
+   "forms": [
+    "al próximo nivel",
+    "al nivel superior",
+    "al máximo nivel"
+   ]
+  },
+  {
+   "find": "sin precedentes",
+   "replace": null,
+   "family": "adjectives"
+  },
+  {
+   "find": "de vanguardia",
+   "replace": null,
+   "family": "adjectives"
+  },
+  {
+   "find": "de primer nivel",
+   "replace": null,
+   "family": "adjectives"
+  },
+  {
+   "find": "sin fisuras",
+   "replace": "sin problemas",
+   "family": "adjectives"
+  },
+  {
+   "find": "enfoque integral",
+   "replace": null,
+   "family": "adjectives",
+   "forms": [
+    "enfoques integrales",
+    "solución integral",
+    "soluciones integrales",
+    "visión integral",
+    "estrategia integral",
+    "estrategias integrales"
+   ]
+  },
+  {
+   "find": "por ende",
+   "replace": "por eso",
+   "family": "connectives"
+  },
+  {
+   "find": "por consiguiente",
+   "replace": "por eso",
+   "family": "connectives"
+  },
+  {
+   "find": "por todo ello",
+   "replace": "por eso",
+   "family": "connectives"
+  },
+  {
+   "find": "es por ello que",
+   "replace": "por eso",
+   "family": "connectives"
+  },
+  {
+   "find": "no obstante",
+   "replace": "aun así",
+   "family": "connectives"
+  },
+  {
+   "find": "en consecuencia",
+   "replace": null,
+   "family": "connectives"
+  },
+  {
+   "find": "sin lugar a dudas",
+   "replace": "",
+   "family": "connectives"
+  },
+  {
+   "find": "sin duda alguna",
+   "replace": "",
+   "family": "connectives"
+  },
+  {
+   "find": "cabe destacar que",
+   "replace": "",
+   "family": "connectives",
+   "forms": [
+    "cabe señalar que",
+    "cabe mencionar que",
+    "cabe resaltar que",
+    "vale la pena destacar que",
+    "vale la pena mencionar que",
+    "vale la pena señalar que",
+    "es importante destacar que",
+    "es importante señalar que",
+    "es importante mencionar que",
+    "es importante tener en cuenta que",
+    "es fundamental destacar que",
+    "es crucial destacar que",
+    "es esencial destacar que",
+    "cabe destacar",
+    "cabe señalar",
+    "cabe mencionar"
+   ]
+  },
+  {
+   "find": "en definitiva",
+   "replace": "al final",
+   "family": "connectives"
+  },
+  {
+   "find": "en última instancia",
+   "replace": "al final",
+   "family": "connectives"
+  },
+  {
+   "find": "en esencia",
+   "replace": "básicamente",
+   "family": "connectives"
+  },
+  {
+   "find": "en conclusión",
+   "replace": "",
+   "family": "connectives",
+   "forms": [
+    "para concluir",
+    "para resumir"
+   ]
+  },
+  {
+   "find": "con el fin de que",
+   "replace": "para que",
+   "family": "connectives",
+   "forms": [
+    "con el objetivo de que",
+    "con la finalidad de que",
+    "a fin de que"
+   ]
+  },
+  {
+   "find": "con el fin de",
+   "replace": "para",
+   "family": "connectives",
+   "forms": [
+    "con el objetivo de",
+    "con la finalidad de",
+    "en aras de"
+   ]
+  },
+  {
+   "find": "en lo que respecta a",
+   "replace": "sobre",
+   "family": "connectives",
+   "forms": [
+    "en lo que se refiere a"
+   ]
+  },
+  {
+   "find": "en el marco de",
+   "replace": "en",
+   "family": "connectives"
+  },
+  {
+   "find": "en el mundo actual",
+   "replace": "hoy",
+   "family": "openers",
+   "forms": [
+    "en el mundo de hoy",
+    "en la era digital",
+    "en la era actual",
+    "en el panorama actual",
+    "en un mundo en constante cambio",
+    "en un mundo en constante evolución",
+    "en un entorno en constante cambio",
+    "en un entorno en constante evolución",
+    "en un mundo que cambia constantemente",
+    "en un mundo cada vez más conectado",
+    "en un mundo cada vez más digital",
+    "en un mundo cada vez más competitivo"
+   ]
+  },
+  {
+   "find": "en el vertiginoso mundo de",
+   "replace": "en",
+   "family": "openers",
+   "forms": [
+    "en el acelerado mundo de",
+    "en el dinámico mundo de",
+    "en el competitivo mundo de",
+    "en el apasionante mundo de",
+    "en el fascinante mundo de",
+    "en el cambiante mundo de",
+    "en el vasto mundo de",
+    "en el siempre cambiante mundo de"
+   ]
+  },
+  {
+   "find": "en un mundo cada vez más",
+   "replace": null,
+   "family": "openers"
+  },
+  {
+   "find": "seamos sinceros",
+   "replace": "",
+   "family": "openers",
+   "forms": [
+    "seamos honestos",
+    "seamos realistas",
+    "la verdad sea dicha"
+   ]
+  },
+  {
+   "find": "aquí está la cuestión",
+   "replace": "",
+   "family": "openers",
+   "forms": [
+    "aquí está el truco",
+    "aquí viene lo mejor",
+    "y aquí viene lo bueno"
+   ]
+  },
+  {
+   "find": "no es ningún secreto que",
+   "replace": "",
+   "family": "openers",
+   "forms": [
+    "no es un secreto que"
+   ]
+  },
+  {
+   "find": "todos hemos pasado por eso",
+   "replace": "",
+   "family": "openers",
+   "forms": [
+    "todos hemos estado ahí",
+    "todos hemos pasado por ahí"
+   ]
+  },
+  {
+   "find": "sin más preámbulos",
+   "replace": "",
+   "family": "openers",
+   "forms": [
+    "sin más dilación",
+    "sin más demora",
+    "sin mayor preámbulo"
+   ]
+  },
+  {
+   "find": "dicho esto",
+   "replace": "",
+   "family": "openers",
+   "forms": [
+    "dicho eso",
+    "habiendo dicho esto",
+    "con todo esto en mente"
+   ]
+  },
+  {
+   "find": "imagina esto",
+   "replace": "",
+   "family": "openers"
+  },
+  {
+   "find": "me complace anunciar que",
+   "replace": "",
+   "family": "openers",
+   "forms": [
+    "me emociona anunciar que",
+    "me enorgullece anunciar que",
+    "estoy encantado de anunciar que",
+    "estoy encantada de anunciar que",
+    "estoy emocionado de anunciar que",
+    "estoy emocionada de anunciar que"
+   ]
+  },
+  {
+   "find": "estoy emocionado de compartir",
+   "replace": null,
+   "family": "openers",
+   "forms": [
+    "estoy emocionada de compartir",
+    "estoy encantado de compartir",
+    "estoy encantada de compartir",
+    "me emociona compartir",
+    "me llena de orgullo compartir"
+   ]
+  },
+  {
+   "find": "alguna vez te has preguntado",
+   "replace": null,
+   "family": "openers",
+   "forms": [
+    "¿alguna vez te has preguntado",
+    "alguna vez te has planteado",
+    "te has preguntado alguna vez"
+   ]
+  },
+  {
+   "find": "estás listo para",
+   "replace": null,
+   "family": "openers",
+   "forms": [
+    "estás lista para",
+    "¿estás listo para",
+    "¿estás lista para",
+    "¿listo para",
+    "¿lista para"
+   ]
+  },
+  {
+   "find": "no busques más",
+   "replace": null,
+   "family": "openers"
+  },
+  {
+   "find": "sumérgete en el mundo de",
+   "replace": null,
+   "family": "openers",
+   "forms": [
+    "sumérgete en el universo de"
+   ]
+  },
+  {
+   "find": "deja que eso cale",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "deja que eso se asiente",
+    "deja que eso te cale"
+   ]
+  },
+  {
+   "find": "la decisión es tuya",
+   "replace": "",
+   "family": "closers"
+  },
+  {
+   "find": "el futuro es ahora",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "el futuro ya está aquí",
+    "el futuro está aquí"
+   ]
+  },
+  {
+   "find": "y el resto es historia",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "el resto es historia"
+   ]
+  },
+  {
+   "find": "léelo otra vez",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "léelo de nuevo",
+    "léelo otra vez más"
+   ]
+  },
+  {
+   "find": "guarda esto para después",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "guárdalo para después",
+    "guarda esto para más tarde",
+    "guárdalo para más tarde",
+    "guarda este post para más tarde",
+    "guarda este post para después"
+   ]
+  },
+  {
+   "find": "¿quién se apunta?",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "quién se apunta"
+   ]
+  },
+  {
+   "find": "al final del día",
+   "replace": null,
+   "family": "closers"
+  },
+  {
+   "find": "espero que esto te haya sido útil",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "espero que esto te sea útil",
+    "espero que te haya servido",
+    "espero que esto te ayude"
+   ]
+  },
+  {
+   "find": "deja un comentario abajo",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "deja tu comentario abajo",
+    "déjame un comentario abajo"
+   ]
+  },
+  {
+   "find": "sígueme para más contenido",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "síguenos para más contenido",
+    "sígueme para más",
+    "síguenos para más",
+    "sígueme para ver más contenido como este"
+   ]
+  },
+  {
+   "find": "comparte con alguien que lo necesite",
+   "replace": "",
+   "family": "closers",
+   "forms": [
+    "comparte esto con alguien que lo necesite",
+    "etiqueta a alguien que necesite ver esto"
+   ]
+  }
+ ],
+ "structures": [
+  {
+   "id": "not-just",
+   "name": "\"No es solo X, es Y\" (It's not just X, it's Y)",
+   "regex": "(?i)\\bno\\s+(?:es|son|fue)\\s+(?:s[oó]lo|solamente|simplemente|[uú]nicamente)\\s+[^.!?\\n]{2,60}[,.]\\s*(?:es|son|fue|sino)\\b|\\bno\\s+se\\s+trata\\s+(?:s[oó]lo\\s+|solamente\\s+|simplemente\\s+|[uú]nicamente\\s+)?de\\s+[^.!?\\n]{2,80}[,.]\\s*(?:sino|se\\s+trata)\\b",
+   "fix": "Say the one thing you actually mean. Delete the setup half."
+  },
+  {
+   "id": "not-only",
+   "name": "\"No solo X, sino también Y\" (Not only X but also Y)",
+   "regex": "(?i)\\bno\\s+s[oó]lo\\b[^.!?\\n]{2,80}\\bsino\\s+(?:tambi[eé]n|que)\\b",
+   "fix": "Split into two sentences, or drop the weaker half."
+  },
+  {
+   "id": "isnt-about",
+   "name": "\"Esto no va de X. Va de Y.\" (It isn't about X. It's about Y.)",
+   "regex": "(?i)\\bno\\s+(?:va|se\\s+trata)\\s+de\\s+[^.!?\\n]{2,60}[.!]\\s*(?:va|se\\s+trata|es)\\s+de\\b",
+   "fix": "Lead with Y. The reversal is the tell."
+  },
+  {
+   "id": "the-result",
+   "name": "One-phrase rhetorical question line (¿El resultado?)",
+   "regex": "(?im)^\\s*¿?(?:el\\s+resultado|la\\s+mejor\\s+parte|el\\s+truco|el\\s+problema|la\\s+clave|el\\s+secreto|lo\\s+mejor)\\?\\s*$",
+   "fix": "Answer it inline instead of staging a reveal."
+  },
+  {
+   "id": "heres-what",
+   "name": "\"Esto es lo que aprendí\" (Here's what I learned)",
+   "regex": "(?i)\\b(?:esto\\s+es|esto\\s+fue|aqu[ií]\\s+(?:est[aá]|va))\\s+lo\\s+que\\s+(?:aprend[ií]|aprendimos)\\b",
+   "fix": "State the lesson. Skip the announcement."
+  },
+  {
+   "id": "triad",
+   "name": "Rule-of-three triad (X, Y y Z.)",
+   "regex": "(?i)\\b\\w+, \\w+ y \\w+\\.",
+   "fix": "Two items or four. Three is the model's default rhythm."
+  },
+  {
+   "id": "rocket",
+   "name": "Rocket / fire / bulb / sparkle / dart emoji",
+   "regex": "[🚀🔥💡✨🎯]",
+   "fix": "One emoji max, and not one of these five."
+  },
+  {
+   "id": "hashtag-wall",
+   "name": "Hashtag wall (5+)",
+   "regex": "(?:#\\w+[ \\t]*){5,}",
+   "fix": "Three hashtags. Instagram now caps a post at five and a wall reads as old."
+  },
+  {
+   "id": "as-an-ai",
+   "name": "Model self-reference (Como modelo de lenguaje)",
+   "regex": "(?i)\\bcomo\\s+(?:un\\s+|una\\s+)?(?:ia\\b|modelo\\s+de\\s+lenguaje|inteligencia\\s+artificial|asistente\\s+de\\s+ia)",
+   "fix": "Delete the sentence."
+  },
+  {
+   "id": "in-summary",
+   "name": "Essay-closer opener (En resumen / En conclusión)",
+   "regex": "(?im)^\\s*(?:en\\s+resumen|en\\s+conclusi[oó]n|para\\s+resumir|en\\s+s[ií]ntesis|para\\s+concluir|en\\s+definitiva)\\b",
+   "fix": "A post does not need a conclusion paragraph."
+  },
+  {
+   "id": "engagement-bait",
+   "name": "Reflex engagement bait (¿Qué opinas?)",
+   "regex": "(?i)(?:\\bte\\s+parece\\?|\\bqu[eé]\\s+opinas\\?|\\bqu[eé]\\s+piensas\\?|\\best[aá]s\\s+de\\s+acuerdo\\?|\\bqui[eé]n\\s+m[aá]s\\b[^.!?\\n]{0,20}\\??|\\bme\\s+equivoco\\?)\\s*$",
+   "fix": "Ask a question only you could ask, about the specific thing above it."
+  },
+  {
+   "id": "stop-scroll",
+   "name": "\"Deja de hacer scroll\" opener (Stop scrolling)",
+   "regex": "(?im)^\\s*[¡]?\\s*(?:det[eé]n|para|deja)\\s+(?:de\\s+hacer\\s+|el\\s+)?scroll\\b|^\\s*[¡]?\\s*(?:espera|no\\s+te\\s+vayas|no\\s+sigas\\s+bajando)\\b",
+   "fix": "The scroll-stop has to be the claim itself. Asking for attention is the tell that you have not earned it."
+  },
+  {
+   "id": "in-this-video",
+   "name": "Video preamble (\"en este video te voy a mostrar\")",
+   "regex": "(?i)\\b(?:en\\s+(?:este|esta|el)\\s+(?:v[ií]deo|reel|post|publicaci[oó]n)|hoy\\s+(?:te\\s+voy\\s+a|voy\\s+a|vamos\\s+a)\\s+(?:ense[ñn]ar|mostrar|explicar|contar|ver)|te\\s+voy\\s+a\\s+(?:ense[ñn]ar|mostrar|explicar))\\b",
+   "fix": "Delete it and start at the payoff. The first two seconds decide the whole reel."
+  },
+  {
+   "id": "emoji-bullets",
+   "name": "Emoji bullet list",
+   "regex": "(?m)^\\s*[🌀-🫿✅➡⬅✔✨]\\s*\\S",
+   "fix": "Use a hyphen or a line break. Emoji bullets are the single most template-looking thing in a caption."
+  },
+  {
+   "id": "caps-shout",
+   "name": "Three or more shouted words in a row",
+   "regex": "\\b[A-ZÁÉÍÓÚÑ]{3,}\\b(?:\\s+\\b[A-ZÁÉÍÓÚÑ]{3,}\\b){2,}",
+   "fix": "Caps are a volume knob, not a highlighter. One word, at most."
+  },
+  {
+   "id": "follow-bait",
+   "name": "Reflex follow or tag bait (síguenos para más)",
+   "regex": "(?i)\\b(?:s[ií]gueme\\s+para\\s+m[aá]s|etiqueta\\s+a\\s+(?:alguien|un\\s+amigo|una\\s+amiga|esa\\s+persona)|doble\\s+tap\\s+si|dale\\s+(?:me\\s+gusta|like)\\s+si|comparte(?:lo)?\\s+si|comenta\\s+abajo\\s+si)\\b",
+   "fix": "Ask for the one action this post actually earns. The generic ask trains the audience to ignore every ask."
+  },
+  {
+   "id": "y-si-te-dijera",
+   "name": "\"¿Y si te dijera que...?\" (What if I told you)",
+   "regex": "(?i)¿\\s*y\\s+si\\s+te\\s+dijera\\s+que\\b",
+   "fix": "Say the claim. The rhetorical wind-up is the tell."
+  }
+ ]
+}

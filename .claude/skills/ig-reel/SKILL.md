@@ -127,6 +127,33 @@ Write it separately, every time. It is read before it is heard.
 - **Do not write a script around a trending audio the user cannot use.** If the
   idea needs the user's own voice, say so.
 
+## Language
+
+English and Spanish both work, one Reel at a time. `hookscore.py` and `beats.py`
+read the language of each hook or script on their own and print
+`language: Spanish (detected)` when they switch; `--lang es` or `--lang en`
+forces it. English output is exactly what it was before Spanish was added.
+
+- **Write a Spanish Reel from `hooks.es.json`**, not by translating an English
+  hook. It has the same 26 ids in the same order (`#3` is the same formula in
+  both files), each with a Spanish template, example, on-screen line, what it is
+  for and how it gets ruined.
+- **One Reel, one language.** A user who posts an idea in both languages gets
+  two Reels, each written from its own formula and scored with its own run.
+- **Check the speaking rate.** `beats.py` defaults to 165 words per minute, the
+  English figure. Have the user read a script aloud once, time it, and pass
+  `--wpm`.
+- **Accents.** Matching ignores them, with one exception: the first-person past
+  tense of an `-ar` verb (`gané`, `cobré`) is recognised by its accent, so typed
+  as `gane` or `cobre` the hook reads as third person. `perdí` and `perdi`,
+  `hice` and `fui` are fine either way.
+- **The Spanish panel is untested.** The author of `hookscore.py` tested the
+  English panel against 74 real hooks. The Spanish word lists were written from
+  how Spanish hooks are built and have been checked against no real Spanish
+  reels. Trust them to catch a greeting, a preamble and a hook with nothing
+  concrete in it. Do not read an absolute Spanish score as a prediction, and say
+  so when you show one.
+
 ## Example
 
 ```
