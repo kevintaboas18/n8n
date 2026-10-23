@@ -27,6 +27,13 @@ Ask for whichever the user has:
 Also read `~/.claude/instagram/log.md` if it exists, since it records which
 hook formula each post used.
 
+If the account is connected (`/ig-connect doctor` passes), run
+`python3 ../ig-connect/igapi.py insights --limit 30 --json` instead of asking for
+screenshots. It returns views, reach, shares, saves and follows per post, plus the
+outlier multiple, sends per reach and saves per reach. It does not return the
+retention graph or the non-follower share of reach, so still ask for the retention
+screenshot of the best and worst reels.
+
 ## What to actually measure
 
 Raw views is the least useful number on the page, because it is mostly a

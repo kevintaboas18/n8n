@@ -22,6 +22,11 @@ writes.
 The user pastes the comments, ideally with handles. Screenshots are fine. Do
 not scrape the thread with a browser tool.
 
+If the account is connected with the comments permission, `python3
+../ig-connect/igapi.py media` lists the post ids and `comments POST_ID --json`
+reads the thread. Without that permission, ask the user to paste them. Either way
+nothing is posted: the user sends the replies.
+
 ## Triage first
 
 Sort every comment into one of six buckets and say the counts out loud:

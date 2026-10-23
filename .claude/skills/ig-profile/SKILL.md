@@ -24,6 +24,11 @@ rows is enough for a first pass.
 
 Do not log into Instagram on their behalf.
 
+If the account is connected (`/ig-connect doctor` passes), run
+`python3 ../ig-connect/igapi.py me --json` for the name field, handle, bio, website
+and follower count. The API may withhold the bio and website, and it says so. It
+cannot see highlights, pinned posts or the grid, so still ask for those.
+
 ## Score it
 
 Read `rubric.json` in this folder. Twelve items, 100 points, each with what
